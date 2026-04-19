@@ -19,7 +19,41 @@ Harbor Scenario 2 requires running the **same agent on both sides** (Harbor and 
 
 - Docker installed and running
 - Codex CLI config (`config.toml`) with API credentials
-- RefAV dataset prepared (`datasets/refav/` with 1500 `val_*/` task directories)
+- OpenAI API key (or compatible endpoint)
+- RefAV Harbor dataset (1500 `val_*/` task directories)
+
+### Obtaining the dataset
+
+The dataset is available through two channels:
+
+**Option A: Via Harbor (recommended)**
+```bash
+# After the dataset is registered in harbor-datasets
+harbor pull refav
+# Dataset will be at ~/.harbor/datasets/refav/
+```
+
+**Option B: Build from source**
+
+Requires the original RefAV annotations from HuggingFace and the AV2 sensor dataset metadata:
+```bash
+# 1. Download RefAV annotations
+pip install huggingface_hub
+python -c "
+from huggingface_hub import hf_hub_download
+hf_hub_download(repo_id='CainanD/RefAV', filename='scenario_mining_val_annotations.feather',
+                repo_type='dataset', local_dir='./refav_downloads')
+hf_hub_download(repo_id='CainanD/RefAV', filename='log_prompt_pairs_val.json',
+                repo_type='dataset', local_dir='./refav_downloads')
+"
+
+# 2. Run the Harbor adapter to generate task directories
+# (requires the adapter code from https://github.com/cdb342/harbor/tree/refav-adapter)
+cd /path/to/harbor/adapters/refav
+python main.py --output-dir /path/to/datasets/refav --source-dir /path/to/source
+```
+
+Each task directory contains everything needed to run in Docker — no external data dependencies.
 
 ### 1. Generate parity task list
 
