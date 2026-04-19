@@ -125,4 +125,3 @@ HOTA-Temporal is used as the single reward value, consistent with the [EvalAI co
 
 - Harbor adapter: [cdb342/harbor/tree/refav-adapter](https://github.com/cdb342/harbor/tree/refav-adapter)
 - Original RefAV: [CainanD/RefAV](https://github.com/CainanD/RefAV)
-- Adapter maintainer: Dubing Chen (dobbin.chen@gmail.com)
